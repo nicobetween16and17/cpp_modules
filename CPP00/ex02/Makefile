@@ -1,4 +1,4 @@
-NAME	=	account
+c++NAME	=	account
 
 all:	$(NAME)
 

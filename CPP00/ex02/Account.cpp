@@ -2,47 +2,25 @@
 #include "iostream"
 using namespace std;
 
-int setNbAccount(int value)
-{
-	static int send;
-	if (value >= 0)
-		send = value;
-	return (send);
-}
-int setTotalAmount(int value)
-{
-	static int send;
-	send += value;
-	return (send);
-}
-int setNbDeposits(int value)
-{
-	static int send;
-	if (value >= 0)
-		send = value;
-	return (send);
-}
-int setNbWithdrawals(int value)
-{
-	static int send;
-	if (value >= 0)
-		send = value;
-	return (send);
-}
+int Account::_nbAccounts = 0;
+int Account::_totalAmount= 0;
+int Account::_totalNbDeposits= 0;
+int Account::_totalNbWithdrawals = 0;
+
 int Account::getNbAccounts(void){
-	return (setNbAccount(-1));
+	return (_nbAccounts);
 }
 
 int Account::getTotalAmount(void){
-	return (setTotalAmount(0));
+	return (_totalAmount);
 }
 
 int Account::getNbDeposits(void){
-	return (setNbDeposits(-1));
+	return (_totalNbDeposits);
 }
 
 int Account::getNbWithdrawals(void){
-	return (setNbWithdrawals(-1));
+	return (_totalNbWithdrawals);
 }
 
 void Account::_displayTimestamp(void){
@@ -60,15 +38,13 @@ void Account::_displayTimestamp(void){
 void Account::makeDeposit(int deposit){
 	this->_amount += deposit;
 	this->_nbDeposits++;
-	setTotalAmount(deposit);
-	setNbDeposits(getNbDeposits() + 1);
+	this->_totalAmount += deposit;
 }
 
 bool Account::makeWithdrawal(int withdrawal){
 	if (withdrawal <= this->_amount) {
 		this->_amount -= withdrawal;
-		setTotalAmount(-withdrawal);
-		setNbWithdrawals(getNbWithdrawals() + 1);
+        this->_totalAmount -= withdrawal;
 		this->_nbWithdrawals++;
 		return (true);
 	}
@@ -89,18 +65,10 @@ void Account::displayStatus(void) const{
 			<<"withdrawals:"<< this->_nbWithdrawals << ";\n";
 }
 
-static int amount()
-{
-	static int n;
-
-	return (n++);
-}
-
 Account::Account(int initial_deposit){
 	this->_amount = initial_deposit;
-	this->_accountIndex = amount();
-	setNbAccount(getNbAccounts() + 1);
-	setTotalAmount(initial_deposit);
+	this->_accountIndex = _nbAccounts++;
+	_totalAmount = initial_deposit;
 	_displayTimestamp();
 	cout << "index:"<<this->_accountIndex<<";"<<
 			"amount:"<< this->_amount<<";created\n";
@@ -115,7 +83,7 @@ void Account::displayAccountsInfos(void) {
 }
 Account::~Account(){
 	_displayTimestamp();
-	setNbAccount(getNbAccounts() - 1);
+	_nbAccounts--;
 	cout << "index:"<<this->_accountIndex<<";"<<
 		 "amount:"<< this->_amount<<";closed\n";
 }
