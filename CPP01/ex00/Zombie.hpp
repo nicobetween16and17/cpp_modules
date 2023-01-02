@@ -11,25 +11,39 @@ private:
     string name;
 
 public:
-    Zombie();
+    Zombie(string name);
 
-    string get_name();
+    ~Zombie();
 
-    void set_name(string);
+    void    announce(void);
 
-    void to_string();
+    Zombie* newZombie(string name);
+
+    void    randomChump(string name);
 };
 
-Zombie::Zombie() {
-    name = 0;
+Zombie::Zombie(string name) {
+    this->_name = name;
 }
 
-string Zombie::get_name() { return name; }
+Zombie::~Zombie() {
+    std::cout << "Zombie " << this->_name << " has been destroyed." << std::endl;
+}
 
-void Zombie::set_name(string new_name) { name = new_name; }
+void    Zombie::announce( void ) {
+    std::cout << this->_name << ": BraiiiiiiinnnzzzZ..." << std::endl;
+}
 
-void Zombie::to_string() {
-    cout << "name" << name << endl;
+Zombie  *newZombie(string name)
+{
+    return (new Zombie(name));
+}
+
+
+void    randomChump(string name)
+{
+    Zombie random(name);
+    random.announce();
 }
 
 #endif
